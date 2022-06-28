@@ -30,6 +30,7 @@ const Welcome = () => {
   const [currentPin, setCurrentPin] = useState("");
   const [pinData, setPinData] = useState("");
   const { ethereum } = window;
+  const [pinLoading, setPinLoading] = useState (false);
 
   const handlePin = (e, htmlname) => {
     setPinData((prevState) => ({ ...prevState, [htmlname]: e.target.value }));
@@ -50,8 +51,13 @@ const Welcome = () => {
   //pin data is an object with a pin data property for some reason
   const changePin = async () => {
     const transactionsContract = createEthereumContract();
-    await transactionsContract.setPin(parseInt(pinData.pinData));
+    const pinUpdate = await transactionsContract.setPin(parseInt(pinData.pinData));
+
+    setPinLoading(true);
+    await pinUpdate.wait();
+    setPinLoading(false);
     setCurrentPin(pinData);
+    window.location.reload();
   }
 
   const createEthereumContract = () => {
@@ -78,9 +84,6 @@ const Welcome = () => {
     setInitialPin()
       .catch(console.error);
   })
-
-
- 
 
 
   return (
@@ -124,17 +127,30 @@ const Welcome = () => {
           </div>
         </div>
 
-      
-        <div className="flex flex-col flex-1 items-center justify-start w-full mf:mt-0 mt-10">
-        <button
+        {pinLoading
+              ? <button
               type="button"
-              onClick= {changePin}
+              
+              className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+            >
+              <p className="text-white text-base font-semibold">
+              <div class="lds-dual-ring"></div>
+              </p>
+          </button>
+
+              : (
+                <button
+              type="button"
+              onClick= {pinData && changePin}
               className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
             >
               <p className="text-white text-base font-semibold">
                 Set Pin
               </p>
           </button>
+              )}
+        <div className="flex flex-col flex-1 items-center justify-start w-full mf:mt-0 mt-10">
+        
           <div className="p-5 sm:w-96 w-half flex flex-col justify-start items-center blue-glassmorphism">
                 <Input placeholder="New pin" name="pinData" type="text" handleChange={handlePin} />
           </div>
@@ -152,10 +168,11 @@ const Welcome = () => {
                   {shortenAddress(currentAccount)}
                 </p>
                 <p className="text-white font-semibold text-lg mt-1">
-                  Ethereum 
+                  Ethereum  
                 </p>
-                <div> {currentAccount ? (parseInt(currentPin._hex,16)) : '0000'} </div>
-               
+                <p className="text-white font-semibold text-lg mt-1">
+                  Public Pin: { currentAccount ? (parseInt(currentPin._hex,16)) : '0000'}
+                </p>
               </div>
             </div>
           </div>
