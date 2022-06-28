@@ -37,15 +37,25 @@ const Welcome = () => {
     console.log(pinData);
   };
 
-  const handleSubmit = (e) => {
-    const { addressTo, amount, keyword, message } = formData;
+  const handleSubmit = async (e) => {
+    const { addressTo, recipientPin, amount, keyword, message } = formData;
+//find true pin from smart contract
+      const transactionsContract = createEthereumContract();
+      const truePin = await transactionsContract.getPin(addressTo);
+      
+      //prevents reload
+      e.preventDefault();
 
-    //prevents reload
-    e.preventDefault();
+    if (!addressTo || !recipientPin || !amount || !keyword || !message) return;
+    //check if inputted pin is same as true pin
+    if ((parseInt(truePin._hex,16)) === parseInt(recipientPin, 10)){
+      sendTransaction();
+    }
 
-    if (!addressTo || !amount || !keyword || !message) return;
-
-    sendTransaction();
+    else {
+      console.log("Error: Wrong pin");
+      console.log("Pin of recipient was",(parseInt(truePin._hex,16)), " You entered", parseInt(recipientPin, 10));
+    }
   };
 
   //pin data is an object with a pin data property for some reason
@@ -94,7 +104,7 @@ const Welcome = () => {
             Send Crypto <br /> without the stress
           </h1>
           <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
-            Explore the crypto world. Send crypto safely with SCOUT!
+            Explore blockchain. Send crypto safely with SCOUT!
           </p>
           {!currentAccount && (
             <button
@@ -178,6 +188,7 @@ const Welcome = () => {
           </div>
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
             <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange} />
+            <Input placeholder="RECIPIENT'S Pin" name="recipientPin" type="text" handleChange={handleChange} />
             <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange} />
             <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} />
             <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />

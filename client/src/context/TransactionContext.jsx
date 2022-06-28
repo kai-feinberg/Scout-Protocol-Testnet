@@ -25,7 +25,7 @@ const createEthereumContract = () => {
 //object is accessible to entirety of our application
 export const TransactionProvider = ({ children }) => {
   //data passed up from welcome to context file through children
-  const [formData, setformData] = useState({ addressTo: "", amount: "", keyword: "", message: "" });
+  const [formData, setformData] = useState({ addressTo: "", recipientPin: "", amount: "", keyword: "", message: "" });
   const [currentAccount, setCurrentAccount] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [transactionCount, setTransactionCount] = useState(localStorage.getItem("transactionCount"));
@@ -119,10 +119,10 @@ export const TransactionProvider = ({ children }) => {
   const sendTransaction = async () => {
     try {
       if (ethereum) {
-        const { addressTo, amount, keyword, message } = formData;
+        const { addressTo, recipientPin, amount, keyword, message } = formData;
         const transactionsContract = createEthereumContract();
         const parsedAmount = ethers.utils.parseEther(amount);
-
+        
         //requests a p-2-p txn to be signed from metamask
         await ethereum.request({
           method: "eth_sendTransaction",
