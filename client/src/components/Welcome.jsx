@@ -47,6 +47,13 @@ const Welcome = () => {
     sendTransaction();
   };
 
+  //pin data is an object with a pin data property for some reason
+  const changePin = async () => {
+    const transactionsContract = createEthereumContract();
+    await transactionsContract.setPin(parseInt(pinData.pinData));
+    setCurrentPin(pinData);
+  }
+
   const createEthereumContract = () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
@@ -56,33 +63,24 @@ const Welcome = () => {
   
     return transactionsContract;
   };
-  
-  //pin data is an object with a pin data property for some reason
-  const changePin = async () => {
-    const transactionsContract = createEthereumContract();
-    await transactionsContract.setPin(parseInt(pinData.pinData));
-    setCurrentPin(pinData);
-    console.log(currentPin);
-  }
 
-  
   useEffect(() => {
     // declare the async data fetching function
     const setInitialPin = async () => {
       const transactionsContract = createEthereumContract();
       const p = await transactionsContract.getPin(currentAccount);
-      
+      //console.log("pin = ", p);
       // set state with the result
       setCurrentPin(p);
+      //console.log("initial pin", currentPin);
     }
   
-    // call the function
     setInitialPin()
-      // make sure to catch any error
       .catch(console.error);
+  })
 
-    console.log("initial pin", currentPin);
-  }, [])
+
+ 
 
 
   return (
@@ -134,7 +132,7 @@ const Welcome = () => {
               className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
             >
               <p className="text-white text-base font-semibold">
-                Set Pin  {console.log(currentPin)}
+                Set Pin
               </p>
           </button>
           <div className="p-5 sm:w-96 w-half flex flex-col justify-start items-center blue-glassmorphism">
@@ -156,7 +154,7 @@ const Welcome = () => {
                 <p className="text-white font-semibold text-lg mt-1">
                   Ethereum 
                 </p>
-                <div>{currentPin.currentPin}</div>
+                <div> {currentAccount ? (parseInt(currentPin._hex,16)) : '0000'} </div>
                
               </div>
             </div>

@@ -160,6 +160,7 @@ export const TransactionProvider = ({ children }) => {
     checkIfWalletIsConnect();
     checkIfTransactionsExists();
   }, [transactionCount]);
+  
 
   return (
     <TransactionContext.Provider
