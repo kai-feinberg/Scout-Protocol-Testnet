@@ -2,6 +2,8 @@
 //use props to pass variables back and forth between files
 import React, { useEffect, useState } from "react";
 import { ethers } from "ethers";
+import Notiflix from 'notiflix';
+
 
 import { contractABI, contractAddress } from "../utils/constants";
 
@@ -119,7 +121,7 @@ export const TransactionProvider = ({ children }) => {
   const sendTransaction = async () => {
     try {
       if (ethereum) {
-        const { addressTo, recipientPin, amount, keyword, message } = formData;
+        const { addressTo, amount, keyword, message } = formData;
         const transactionsContract = createEthereumContract();
         const parsedAmount = ethers.utils.parseEther(amount);
         
@@ -145,7 +147,9 @@ export const TransactionProvider = ({ children }) => {
         const transactionsCount = await transactionsContract.getTransactionCount();
 
         setTransactionCount(transactionsCount.toNumber());
-        window.location.reload();
+       
+        Notiflix.Notify.success('Transaction '+ JSON.stringify(transactionHash.hash) +' completed successfully', {pauseOnHover: true});
+        
       } else {
         console.log("No ethereum object");
       }

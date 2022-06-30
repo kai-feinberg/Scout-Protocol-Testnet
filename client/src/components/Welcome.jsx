@@ -1,13 +1,14 @@
-import React, { useContext, useState} from "react";
+import React, { useContext, useState } from "react";
 import { AiFillPlayCircle } from "react-icons/ai";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { ethers } from "ethers";
 import { contractABI, contractAddress } from "../utils/constants";
-
+import Notiflix from 'notiflix';
+import { Confirm } from 'notiflix/build/notiflix-confirm-aio';
 
 import { TransactionContext } from "../context/TransactionContext";
-import { shortenAddress } from "../utils/shortenAddress"; 
+import { shortenAddress } from "../utils/shortenAddress";
 import { Loader } from ".";
 import { useEffect } from "react";
 
@@ -26,11 +27,11 @@ const Input = ({ placeholder, name, type, value, handleChange }) => (
 
 const Welcome = () => {
   //destructures all data generated from our context file
-  const {currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading} = useContext(TransactionContext);
+  const { currentAccount, connectWallet, handleChange, sendTransaction, formData, isLoading } = useContext(TransactionContext);
   const [currentPin, setCurrentPin] = useState("");
   const [pinData, setPinData] = useState("");
   const { ethereum } = window;
-  const [pinLoading, setPinLoading] = useState (false);
+  const [pinLoading, setPinLoading] = useState(false);
 
   const handlePin = (e, htmlname) => {
     setPinData((prevState) => ({ ...prevState, [htmlname]: e.target.value }));
@@ -38,25 +39,38 @@ const Welcome = () => {
   };
 
   const handleSubmit = async (e) => {
-    const { addressTo, recipientPin, amount, keyword, message } = formData;
-//find true pin from smart contract
-      const transactionsContract = createEthereumContract();
-      const truePin = await transactionsContract.getPin(addressTo);
-      
-      //prevents reload
-      e.preventDefault();
+    const { addressTo, amount, keyword, message } = formData;
+    //find true pin from smart contract
+    const transactionsContract = createEthereumContract();
+    const pin = await transactionsContract.getPin(addressTo);
+    const truePin = parseInt(pin._hex,16);
+    //prevents reload
+    e.preventDefault();
 
-    if (!addressTo || !recipientPin || !amount || !keyword || !message) return;
+    if (!addressTo || !amount || !keyword || !message) return;
     //check if inputted pin is same as true pin
-    if ((parseInt(truePin._hex,16)) === parseInt(recipientPin, 10)){
-      sendTransaction();
-    }
-
-    else {
-      console.log("Error: Wrong pin");
-      console.log("Pin of recipient was",(parseInt(truePin._hex,16)), " You entered", parseInt(recipientPin, 10));
-    }
+    // true pin is an object which must be converted to a string with JSON.stringify
+    Confirm.ask(
+      'Confirm Pin',
+      'Please enter the recipients public pin',
+      JSON.stringify(truePin),
+      'submit',
+      'cancel',
+      () => {
+        <div class="wrapper"> <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52"> <circle class="checkmark__circle" cx="26" cy="26" r="25" fill="none"/> <path class="checkmark__check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+              </svg>
+        </div>
+        sendTransaction();
+      },
+      () => {
+        console.log('ahhhhhhhh the pain');
+      },
+    {/*extra options */},
+    );
+    
   };
+ 
+
 
   //pin data is an object with a pin data property for some reason
   const changePin = async () => {
@@ -66,17 +80,18 @@ const Welcome = () => {
     setPinLoading(true);
     await pinUpdate.wait();
     setPinLoading(false);
+    Notiflix.Notify.success('Pin changed successfully to '+ JSON.stringify(pinData.pinData));
     setCurrentPin(pinData);
-    window.location.reload();
+
   }
 
   const createEthereumContract = () => {
     const provider = new ethers.providers.Web3Provider(ethereum);
     const signer = provider.getSigner();
-    
+
     //creates contract object in JSX
     const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
-  
+
     return transactionsContract;
   };
 
@@ -90,7 +105,7 @@ const Welcome = () => {
       setCurrentPin(p);
       //console.log("initial pin", currentPin);
     }
-  
+
     setInitialPin()
       .catch(console.error);
   })
@@ -138,33 +153,33 @@ const Welcome = () => {
         </div>
 
         {pinLoading
-              ? <button
-              type="button"
-              
-              className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-            >
-              <p className="text-white text-base font-semibold">
+          ? <button
+            type="button"
+
+            className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+          >
+            <p className="text-white text-base font-semibold">
               <div class="lds-dual-ring"></div>
-              </p>
+            </p>
           </button>
 
-              : (
-                <button
+          : (
+            <button
               type="button"
-              onClick= {pinData && changePin}
+              onClick={pinData && changePin}
               className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
             >
               <p className="text-white text-base font-semibold">
                 Set Pin
               </p>
-          </button>
-              )}
+            </button>
+          )}
         <div className="flex flex-col flex-1 items-center justify-start w-full mf:mt-0 mt-10">
-        
+
           <div className="p-5 sm:w-96 w-half flex flex-col justify-start items-center blue-glassmorphism">
-                <Input placeholder="New pin" name="pinData" type="text" handleChange={handlePin} />
+            <Input placeholder="New pin" name="pinData" type="text" handleChange={handlePin} />
           </div>
-     
+
           <div className="p-3 justify-end items-start flex-col rounded-xl h-40 sm:w-72 w-full my-5 eth-card .white-glassmorphism ">
             <div className="flex justify-between flex-col w-full h-full">
               <div className="flex justify-between items-start">
@@ -178,17 +193,16 @@ const Welcome = () => {
                   {shortenAddress(currentAccount)}
                 </p>
                 <p className="text-white font-semibold text-lg mt-1">
-                  Ethereum  
+                  Ethereum
                 </p>
                 <p className="text-white font-semibold text-lg mt-1">
-                  Public Pin: { currentAccount ? (parseInt(currentPin._hex,16)) : '0000'}
+                  Public Pin: {currentAccount ? (parseInt(currentPin._hex, 16)) : '0000'}
                 </p>
               </div>
             </div>
           </div>
           <div className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
             <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange} />
-            <Input placeholder="RECIPIENT'S Pin" name="recipientPin" type="text" handleChange={handleChange} />
             <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange} />
             <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} />
             <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
