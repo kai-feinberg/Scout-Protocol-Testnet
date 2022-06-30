@@ -97,6 +97,16 @@ background: linear-gradient(329deg, rgba(73,9,121,1) 12%, rgba(37,29,82,1) 55%, 
   border-color: #fff transparent #fff transparent;
   animation: lds-dual-ring 1.2s linear infinite;
 }
+
+.incoming-transaction {
+  outline: 3px solid rgb(44, 166, 190);
+}
+
+.outgoing-transaction {
+  outline: 3px solid rgb(83, 14, 121);
+}
+
+
 @keyframes lds-dual-ring {
   0% {
     transform: rotate(0deg);

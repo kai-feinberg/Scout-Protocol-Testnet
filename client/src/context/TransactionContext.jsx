@@ -149,7 +149,7 @@ export const TransactionProvider = ({ children }) => {
         setTransactionCount(transactionsCount.toNumber());
        
         Notiflix.Notify.success('Transaction '+ JSON.stringify(transactionHash.hash) +' completed successfully', {pauseOnHover: true});
-        
+        window.location.reload();
       } else {
         console.log("No ethereum object");
       }
