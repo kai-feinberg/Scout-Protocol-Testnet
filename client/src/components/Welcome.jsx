@@ -66,7 +66,43 @@ const Welcome = () => {
     );
     
   };
+
+  const manageContact = async () => {
+
+    Notiflix.Confirm.prompt(
+      "Manage Contacts",
+      "Please enter the contact's name",
+      "ex dave",
+      "next",
+      "cancel",
+      (name) =>{
+        Confirm.prompt(
+          'Manage Contacts',
+          "Please enter the contact's address",
+          'ex 0x1603D64dFba1611c4005D20A7044dA2b5C7E30c3',
+          'Add',
+          'Cancel',
+          (address) => {
+            addContact(address,name); //to call async function on smart contract
+          },
+          (clientAnswer) => {
+            console.log("too bad")
+          },
+          {},
+          );
+      },
+      (name) =>{
+        console.log("too bad");
+      },
+      {/*custom options */}
+    )
+  }
  
+  const addContact = async (address, name) =>{
+    const transactionsContract = createEthereumContract();
+    const added = await transactionsContract.addContact(address,name);
+    await added.wait();
+  }
 
 
   //pin data is an object with a pin data property for some reason

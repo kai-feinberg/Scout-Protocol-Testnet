@@ -74,10 +74,14 @@ export const TransactionProvider = ({ children }) => {
       if (!ethereum) return alert("Please install MetaMask.");
 
       const accounts = await ethereum.request({ method: "eth_accounts" });
+      const chainId = await ethereum.request({method: 'eth_chainId'});
 
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
-
+        if (chainId !== '0x4'){
+          Notiflix.Report.warning("Wrong Network!", "Please switch to the rinkeby testnet", "Done");
+          switchNetwork();
+        }
         getAllTransactions();
 
       } else {
@@ -87,6 +91,48 @@ export const TransactionProvider = ({ children }) => {
       console.log(error);
     }
   };
+
+  const switchNetwork = async () => {
+	if (window.ethereum) {
+		try {
+			// Try to switch to the Mumbai testnet
+			await window.ethereum.request({
+				method: 'wallet_switchEthereumChain',
+				params: [{ chainId: '0x4' }], // Check networks.js for hexadecimal network ids
+			});
+      window.location.reload();
+		} catch (error) {
+			// This error code means that the chain we want has not been added to MetaMask
+			// In this case we ask the user to add it to their MetaMask
+			if (error.code === 4902) {
+				try {
+					await window.ethereum.request({
+						method: 'wallet_addEthereumChain',
+						params: [
+							{	
+								chainId: '0x4',
+								chainName: 'Rinkeby Testnet',
+								rpcUrls: ['https://rinkeby.infura.io/v3/'],
+								nativeCurrency: {
+										name: "Ethereum",
+										symbol: "ETH",
+										decimals: 18
+								},
+								blockExplorerUrls: ["https://rinkey.etherscan.io"]
+							},
+						],
+					});
+				} catch (error) {
+					console.log(error);
+				}
+			}
+			console.log(error);
+		}
+	} else {
+		// If window.ethereum is not found then MetaMask is not installed
+		alert('MetaMask is not installed. Please install it to use this app: https://metamask.io/download.html');
+	} 
+}
 
   const checkIfTransactionsExists = async () => {
     try {
