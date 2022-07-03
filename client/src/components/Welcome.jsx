@@ -5,6 +5,7 @@ import { BsInfoCircle } from "react-icons/bs";
 import { ethers } from "ethers";
 import { contractABI, contractAddress } from "../utils/constants";
 import Notiflix from 'notiflix';
+//import PopUp from './PopUp.jsx'
 import { Confirm } from 'notiflix/build/notiflix-confirm-aio';
 
 import { TransactionContext } from "../context/TransactionContext";
@@ -32,10 +33,72 @@ const Welcome = () => {
   const [pinData, setPinData] = useState("");
   const { ethereum } = window;
   const [pinLoading, setPinLoading] = useState(false);
+  const [seen, setSeen] = useState( false);
+  const [contactName, setContactName] = useState("");
+  const [contactAdd, setContactAdd] = useState("");
+
+  const changeSeen = () => {  
+    setSeen(!seen); 
+   }; 
+
+  const PopUp = () => {
+    return (
+      <div className="modal">
+        <div className="modal_content">
+          <span className="close" onClick={changeSeen}>
+            &times;
+          </span>
+
+          <h3 className="text-white text-base font-semibold"> Adding Contact </h3>
+
+          <p className="text-white text-base font-semibold col-25 "> Name: </p>
+          <div className="p-1 sm:w-40 w-quarter flex flex-col justify-start items-center blue-glassmorphism col-75">
+            <Input placeholder="ex Dave" name="name" type="text" handleChange={handleName}/>
+          </div>
+          
+          <br></br>
+          <br></br>
+          <br></br>
+
+          <p className="text-white text-base font-semibold col-25"> Address: </p>
+          <div className="p-1 sm:w-40 w-quarter flex flex-col justify-start items-center blue-glassmorphism col-75">
+            <Input placeholder="ex 0xfA7C630507A3626308467FAf8aeceb756c435559" name="address" type="text" handleChange={handleAdd} />
+          </div>
+          
+
+          <br />
+          <button
+            type="button"
+            onClick={addContact}
+            className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+          >
+            Send now
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+   const addContact = async () =>{
+    if (!contactAdd || !contactName) return;
+    const transactionsContract = createEthereumContract();
+    console.log(contactAdd.address);
+    console.log(contactName.name);
+    const cnt = await transactionsContract.addContact(contactAdd.address, contactName.name);
+    await cnt.wait();
+    changeSeen();
+    window.location.reload();
+   }
+  
 
   const handlePin = (e, htmlname) => {
     setPinData((prevState) => ({ ...prevState, [htmlname]: e.target.value }));
-    console.log(pinData);
+  };
+  const handleName = (e, htmlname) => {
+    setContactName((prevState) => ({ ...prevState, [htmlname]: e.target.value }));
+  };
+  const handleAdd = (e, htmlname) => {
+    setContactAdd((prevState) => ({ ...prevState, [htmlname]: e.target.value }));
   };
 
   const handleSubmit = async (e) => {
@@ -66,43 +129,6 @@ const Welcome = () => {
     );
     
   };
-
-  const manageContact = async () => {
-
-    Notiflix.Confirm.prompt(
-      "Manage Contacts",
-      "Please enter the contact's name",
-      "ex dave",
-      "next",
-      "cancel",
-      (name) =>{
-        Confirm.prompt(
-          'Manage Contacts',
-          "Please enter the contact's address",
-          'ex 0x1603D64dFba1611c4005D20A7044dA2b5C7E30c3',
-          'Add',
-          'Cancel',
-          (address) => {
-            addContact(address,name); //to call async function on smart contract
-          },
-          (clientAnswer) => {
-            console.log("too bad")
-          },
-          {},
-          );
-      },
-      (name) =>{
-        console.log("too bad");
-      },
-      {/*custom options */}
-    )
-  }
- 
-  const addContact = async (address, name) =>{
-    const transactionsContract = createEthereumContract();
-    const added = await transactionsContract.addContact(address,name);
-    await added.wait();
-  }
 
 
   //pin data is an object with a pin data property for some reason
@@ -143,6 +169,7 @@ const Welcome = () => {
       .catch(console.error);
   })
 
+  
 
   return (
     <div className="flex w-full justify-center items-center">
@@ -209,10 +236,36 @@ const Welcome = () => {
           )}
         <div className="flex flex-col flex-1 items-center justify-start w-full mf:mt-0 mt-10">
 
-          <div className="p-5 sm:w-96 w-half flex flex-col justify-start items-center blue-glassmorphism">
+          <div className="p-2 sm:w-40 w-quarter flex flex-col justify-start items-center blue-glassmorphism">
             <Input placeholder="New pin" name="pinData" type="text" handleChange={handlePin} />
           </div>
 
+        <div>
+          <div>
+            <button
+              type="button"
+              onClick={changeSeen}
+              className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+            >
+              <p className="text-white text-base font-semibold">
+               + Add Contact
+              </p>
+            </button>
+          </div>
+          {seen ? PopUp() : null}
+        </div>
+
+
+          {/* <button
+              type="button"
+              //onClick={console.log("adding contact")}
+              className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+            >
+              <p className="text-white text-base font-semibold">
+                + Add Contact
+              </p>
+            </button> */}
+          
           <div className="p-3 justify-end items-start flex-col rounded-xl h-40 sm:w-72 w-full my-5 eth-card .white-glassmorphism ">
             <div className="flex justify-between flex-col w-full h-full">
               <div className="flex justify-between items-start">
