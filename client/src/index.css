@@ -31,6 +31,13 @@ background: linear-gradient(329deg, rgba(73,9,121,1) 12%, rgba(37,29,82,1) 55%, 
     radial-gradient(at 50% 100%, hsla(225,39%,25%,1) 0, transparent 50%);
 }
 
+.gradient-bg-contacts {
+  background-color:#0f0e13;
+  background-image: 
+    radial-gradient(at 50% 25%, hsla(225,39%,25%,1) 0, transparent 50%), 
+    radial-gradient(at 50% 100%, hsla(225,39%,25%,1) 0, transparent 50%);
+}
+
 .gradient-bg-transactions {
   background-color: #0f0e13;
   background-image: 
@@ -159,6 +166,50 @@ background: linear-gradient(329deg, rgba(73,9,121,1) 12%, rgba(37,29,82,1) 55%, 
     transform: rotate(360deg);
   }
 }
+
+table.purpleHorizon {
+  border: 4px solid #792396;
+  background-color: #181918;
+  width: 350px;
+  text-align: center;
+  border-collapse: collapse;
+}
+table.purpleHorizon td{
+  border: 1px solid #555555;
+  padding: 10px 40px;
+}
+table.purpleHorizon th {
+  border: 1px solid #555555;
+  padding: 10px 4px;
+}
+
+table.purpleHorizon tbody td {
+  font-size: 20px;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+table.purpleHorizon tr:nth-child(even) {
+  background: #4c125f;
+}
+table.purpleHorizon thead {
+  background: #792396;
+  border-bottom: 4px solid #792396;
+}
+table.purpleHorizon thead th {
+  font-size: 25px;
+  font-weight: bold;
+  color: #FFFFFF;
+  text-align: center;
+  border-left: 0px solid #792396;
+}
+table.purpleHorizon thead th:first-child {
+  border-left: none;
+}
+
+table.purpleHorizon tfoot td {
+  font-size: 13px;
+}
+
 
 @tailwind base;
 @tailwind components;

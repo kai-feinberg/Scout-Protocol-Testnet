@@ -1,4 +1,5 @@
 import { Navbar, Welcome, Footer, Services, Transactions } from "./components";
+import Contacts from "./components/Contacts";
 
 const App = () => (
 
@@ -8,6 +9,7 @@ const App = () => (
       <Welcome />
     </div>
     <Services />
+    <Contacts/>
     <Transactions />
     <Footer />
   </div>

@@ -32,7 +32,7 @@ export const TransactionProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [transactionCount, setTransactionCount] = useState(localStorage.getItem("transactionCount"));
   const [transactions, setTransactions] = useState([]);
-
+  const [contacts, setContacts] = useState([]);
   
   //dynamically updates state of form
   const handleChange = (e, htmlname) => {
@@ -45,7 +45,7 @@ export const TransactionProvider = ({ children }) => {
         const transactionsContract = createEthereumContract();
 
         const availableTransactions = await transactionsContract.getAllTransactions();
-        console.log(availableTransactions);
+        //console.log(availableTransactions);
 
         //immediately returns an object for each element in mapping
         const structuredTransactions = availableTransactions.map((transaction) => ({
@@ -57,7 +57,7 @@ export const TransactionProvider = ({ children }) => {
           amount: parseInt(transaction.amount._hex) / (10 ** 18)
         }));
 
-        console.log(structuredTransactions);
+        //console.log(structuredTransactions);
 
         setTransactions(structuredTransactions);
       } else {
@@ -67,6 +67,31 @@ export const TransactionProvider = ({ children }) => {
       console.log(error);
     }
   };
+
+  const getAllContacts = async () =>{
+    try {
+      if (ethereum) {
+        const transactionsContract = createEthereumContract();
+
+        const availableContacts = await transactionsContract.getAllContacts();
+
+        //immediately returns an object for each element in mapping
+        const structuredContacts = availableContacts.map((contact) => ({
+          name: contact.name,
+          address: contact.contactAddress,
+        }));
+
+        //console.log(structuredContacts);
+
+        setContacts(structuredContacts);
+        // console.log(contacts);
+      } else {
+        console.log("Ethereum is not present");
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
 
   const checkIfWalletIsConnect = async () => {
@@ -83,6 +108,7 @@ export const TransactionProvider = ({ children }) => {
           switchNetwork();
         }
         getAllTransactions();
+        getAllContacts();
 
       } else {
         console.log("No accounts found");
@@ -223,6 +249,7 @@ export const TransactionProvider = ({ children }) => {
         sendTransaction,
         handleChange,
         formData,
+        contacts,
       }}
     >
       {children}
