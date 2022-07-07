@@ -51,6 +51,7 @@ const Welcome = () => {
   const [recipient, setRecipient] = useState("");
   //const [transactionCount, setTransactionCount] = useState()
   const [toggleMenu, setToggleMenu] = React.useState(false);
+  const [recName, setRecName] = useState("");
 
   const txnScroll = () => {
     document.getElementById('txns').scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -253,13 +254,14 @@ const Welcome = () => {
       JSON.stringify(truePin),
       'submit',
       'cancel',
+
       () => {
         sendTransaction();
       },
       () => {
         console.log('ahhhhhhhh the pain');
       },
-      {/*extra options */ },
+      {/*extra options */}
     );
 
   };
@@ -278,186 +280,199 @@ const Welcome = () => {
 
   }
 
-  const createEthereumContract = () => {
-    const provider = new ethers.providers.Web3Provider(ethereum);
-    const signer = provider.getSigner();
-
-    //creates contract object in JSX
-    const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
-
-    return transactionsContract;
-  };
-
-  useEffect(() => {
-    // declare the async data fetching function
-    const setInitialPin = async () => {
-      const transactionsContract = createEthereumContract();
-      const p = await transactionsContract.getPin(currentAccount);
-      //console.log("pin = ", p);
-      // set state with the result
-      setCurrentPin(p);
-      //console.log("initial pin", currentPin);
+  const changeRecName = (contact) => {
+    if (contact.address === recipient && recipient !== "") {
+      setRecName(contact.name);
+      console.log(recName);
     }
+  }
+  const checkName = () => {
+    setRecName("not added");
+    [...contacts].map((contact, i) => (changeRecName(contact)))
+  }
 
-    setInitialPin()
-      .catch(console.error);
-  })
+const createEthereumContract = () => {
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
 
-  // useEffect(() => {Navbar()});
+  //creates contract object in JSX
+  const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
 
+  return transactionsContract;
+};
 
-  return (
-    <div>
-      <div className="gradient-bg-welcome">
-        {Navbar()}
-        <div className="flex w-full justify-center items-center">
-          <div className="flex mf:flex-row flex-col items-start justify-between py-10 px-20">
-            <div className="flex flex-1 justify-start items-start flex-col mf:mr-10">
-              <h1 className="text-3xl sm:text-5xl text-white text-gradient py-1">
-                Send Crypto <br /> without the stress
-              </h1>
-              <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
-                Explore blockchain. Send crypto safely with SCOUT!
-              </p>
-              {!currentAccount && (
-                <button
-                  type="button"
-                  onClick={connectWallet}
-                  className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-                >
-                  <AiFillPlayCircle className="text-white mr-2" />
-                  <p className="text-white text-base font-semibold">
-                    Connect Wallet
-                  </p>
-                </button>
-              )}
+useEffect(() => {
+  // declare the async data fetching function
+  const setInitialPin = async () => {
+    const transactionsContract = createEthereumContract();
+    const p = await transactionsContract.getPin(currentAccount);
+    //console.log("pin = ", p);
+    // set state with the result
+    setCurrentPin(p);
+    //console.log("initial pin", currentPin);
+  }
 
-              <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
-                <div className={`rounded-tl-2xl ${companyCommonStyles}`}>
-                  Reliable
-                </div>
-                <div className={companyCommonStyles}>Secure</div>
-                <div className={`sm:rounded-tr-2xl ${companyCommonStyles}`}>
-                  Decentralized
-                </div>
-                <div className={`sm:rounded-bl-2xl ${companyCommonStyles}`}>
-                  Web 3.0
-                </div>
-                <div className={companyCommonStyles}>No Fees</div>
-                <div className={`rounded-br-2xl ${companyCommonStyles}`}>
-                  Intuitive
-                </div>
-              </div>
-            </div>
+  setInitialPin()
+    .catch(console.error);
+})
 
-            <div className="absolute" >
-              {pinLoading
-                ? <button
-                  type="button"
+useEffect(() => checkName(), [recipient]);
 
-                  className="flex flex-row col-25 justify-center items-center my-10 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
-                >
-                  <p className="text-white text-base font-semibold">
-                    <div class="lds-dual-ring"></div>
-                  </p>
-                </button>
-
-                : (
-                  <button
+return (
+  <div>
+    <div className="gradient-bg-welcome">
+      {Navbar()}
+      <div className="flex w-full justify-center items-center">
+        <div className="flex mf:flex-row flex-col items-start justify-between py-10 px-20">
+          <div className="flex flex-1 justify-start items-start flex-col mf:mr-10">
+            <h1 className="text-3xl sm:text-5xl text-white text-gradient py-1">
+              Send Crypto <br /> without the stress
+            </h1>
+            <p className="text-left mt-5 text-white font-light md:w-9/12 w-11/12 text-base">
+              Explore blockchain. Send crypto safely with SCOUT!
+            </p>
+            {!currentAccount && (
+              <button
+                type="button"
+                onClick={connectWallet}
+                className="flex flex-row justify-center items-center my-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+              >
+                <AiFillPlayCircle className="text-white mr-2" />
+                <p className="text-white text-base font-semibold">
+                  Connect Wallet
+                </p>
+              </button>
+            )}
+            {currentAccount && (
+              <div className="flex flex-row justify-center items-center" >
+                {pinLoading
+                  ? <button
                     type="button"
-                    onClick={pinData && changePin}
-                    className="col-25 flex flex-col justify-center items-center my-20 mx-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+
+                    className="flex flex-row col-25 justify-center items-center my-4 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
                   >
                     <p className="text-white text-base font-semibold">
-                      Set Pin
+                      <div class="lds-dual-ring"></div>
                     </p>
                   </button>
-                )}
-                <div className="p-2 col-75 sm:w-40 w-20 my-20 justify-center items-center blue-glassmorphism">
+
+                  : (
+                    <button
+                      type="button"
+                      onClick={pinData && changePin}
+                      className="col-25 flex flex-col justify-center items-center my-4 mx-5 bg-[#2952e3] p-3 rounded-full cursor-pointer hover:bg-[#2546bd]"
+                    >
+                      <p className="text-white text-base font-semibold">
+                        Set Pin
+                      </p>
+                    </button>
+                  )}
+                <div className="p-2 col-75 sm:w-40 w-20 my-4 justify-center items-center blue-glassmorphism">
                   <Input placeholder="New pin" name="pinData" type="text" handleChange={handlePin} />
                 </div>
+              </div>
+            )}
+
+            <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
+              <div className={`rounded-tl-2xl ${companyCommonStyles}`}>
+                Reliable
+              </div>
+              <div className={companyCommonStyles}>Secure</div>
+              <div className={`sm:rounded-tr-2xl ${companyCommonStyles}`}>
+                Decentralized
+              </div>
+              <div className={`sm:rounded-bl-2xl ${companyCommonStyles}`}>
+                Web 3.0
+              </div>
+              <div className={companyCommonStyles}>No Fees</div>
+              <div className={`rounded-br-2xl ${companyCommonStyles}`}>
+                Intuitive
+              </div>
             </div>
           </div>
 
-          <br></br>
-          <div className="flex flex-col flex-1 items-center justify-start w-full mf:mt-0 mt-100">
-            <div className="p-3 flex justify-end items-start flex-col rounded-xl h-40 sm:w-72 w-full my-5 eth-card .white-glassmorphism ">
-              <div className="flex justify-between flex-col w-full h-full">
-                <div className="flex justify-between items-start">
-                  <div className="w-10 h-10 rounded-full border-2 border-white flex justify-center items-center">
-                    <SiEthereum fontSize={21} color="#fff" />
-                  </div>
-                  <BsInfoCircle fontSize={17} color="#fff" />
+
+        </div>
+
+        <br></br>
+        <div className="flex flex-col flex-1 items-center justify-start w-full mf:mt-0 mt-100">
+          <div className="p-3 flex justify-end items-start flex-col rounded-xl h-40 sm:w-72 w-full my-5 eth-card .white-glassmorphism ">
+            <div className="flex justify-between flex-col w-full h-full">
+              <div className="flex justify-between items-start">
+                <div className="w-10 h-10 rounded-full border-2 border-white flex justify-center items-center">
+                  <SiEthereum fontSize={21} color="#fff" />
                 </div>
-                <div>
-                  <p className="text-white font-light text-sm">
-                    {shortenAddress(currentAccount)}
-                  </p>
-                  <p className="text-white font-semibold text-lg mt-1">
-                    Ethereum
-                  </p>
-                  <p className="text-white font-semibold text-lg mt-1">
-                    Public Pin: {currentAccount ? (parseInt(currentPin._hex, 16)) : '0000'}
-                  </p>
-                </div>
+                <BsInfoCircle fontSize={17} color="#fff" />
+              </div>
+              <div>
+                <p className="text-white font-light text-sm">
+                  {shortenAddress(currentAccount)}
+                </p>
+                <p className="text-white font-semibold text-lg mt-1">
+                  Ethereum
+                </p>
+                <p className="text-white font-semibold text-lg mt-1">
+                  Public Pin: {currentAccount ? (parseInt(currentPin._hex, 16)) : '0000'}
+                </p>
               </div>
             </div>
+          </div>
 
-            <div id="test" className="p-5 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
-              <ThemeProvider theme={darkTheme}>
-                <Autocomplete
-                  id="freeSolo"
-                  freeSolo
-                  //options={contacts}
-                  options={contacts.map((option) => option.address)}
-                  renderInput={(params) =>
-                    <TextField {...params} label="Recipient Address/Contact" margin="dense" variant="outlined" />}
-                  className="w-full flex flex-col rounded-sm p-2 outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
-                  //getOptionLabel={options => options.address}
-                  style={{ height: 70 }}
-                  value={recipient}
-                  onChange={(_event, newRecipient) => {
-                    console.log(newRecipient);
-                    if (typeof (newRecipient) === "object") {
-                      console.log((newRecipient.address));
-                      setRecipient(newRecipient.address);
-                      // console.log(recipient);
-                    } else {
-                      setRecipient(newRecipient);
-                    }
-                    //console.log(recipient);
-                  }}
-                />
-              </ThemeProvider>
+          <div className="p-2 sm:w-96 w-full flex flex-col justify-start items-center blue-glassmorphism">
+            <ThemeProvider theme={darkTheme}>
+              <Autocomplete
+                id="freeSolo"
+                freeSolo
+                options={contacts.map((option) => option.address)}
+                renderInput={(params) =>
+                  <TextField {...params} label="Recipient Address/Contact" margin="dense" variant="outlined"
+                  />}
+                className="w-full flex flex-col px-1 rounded-sm  outline-none bg-transparent text-white border-none text-sm white-glassmorphism"
+                style={{ height: 70 }}
+                value={recipient}
+                onChange={(_event, newRecipient) => {
+                if (newRecipient !==null){
+                  console.log(newRecipient);
+                  if (typeof (newRecipient) === "object") {
+                    // console.log((newRecipient.address));
+                    setRecipient(newRecipient.address);
+                    // console.log(recipient);
+                  } else {
+                    setRecipient(newRecipient);
+                  }
+                }}}
+              />
+            </ThemeProvider>
+            <p className= "text-white font-light text-sm align-left"> Recipient: {recName}</p>
 
-              <Input placeholder="Address To" name="addressTo" type="text" handleChange={handleChange} />
-              <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange} />
-              <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} />
-              <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
 
-              <div className="h-[1px] w-full bg-gray-400 my-2" />
+            <Input placeholder="Amount (ETH)" name="amount" type="number" handleChange={handleChange} />
+            <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} />
+            <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
 
-              {isLoading
-                ? <Loader />
-                : (
-                  <button
-                    type="button"
-                    onClick={handleSubmit}
-                    className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
-                  >
-                    Confirm Pin
-                  </button>
-                )}
-            </div>
+            <div className="h-[1px] w-full bg-gray-400 my-2" />
+
+            {isLoading
+              ? <Loader />
+              : (
+                <button
+                  type="button"
+                  onClick={handleSubmit}
+                  className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
+                >
+                  Confirm Pin
+                </button>
+              )}
           </div>
         </div>
       </div>
-      <Services />
-      <div id="contacts"> <Contacts />  </div>
-      <div id="txns"> <Transactions /> </div>
-      <Footer />
     </div>
-  );
+    <Services />
+    <div id="contacts"> <Contacts />  </div>
+    <div id="txns"> <Transactions /> </div>
+    <Footer />
+  </div>
+);
 };
 
 export default Welcome;

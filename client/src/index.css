@@ -120,6 +120,7 @@ background: linear-gradient(329deg, rgba(73,9,121,1) 12%, rgba(37,29,82,1) 55%, 
   z-index: 1;
   width: 100%;
   height: 100%;
+  transform: translate(-300px, 0px);
   background-color: rgba(0, 0, 0, 0.25);
 }
 

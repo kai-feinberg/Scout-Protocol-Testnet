@@ -31,8 +31,7 @@ const Services = () => (
           continue to improve
         </h1>
         <p className="text-left my-2 text-white font-light md:w-9/12 w-11/12 text-base">
-          The best choice for buying and selling your crypto assets, with the
-          various super friendly services we offer
+          The safe way to send your crypto! Free yourself from cumbersome interfaces with SCOUT
         </p>
       </div>
 
