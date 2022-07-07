@@ -39,7 +39,7 @@ const Contacts = () => {
                                         <th>Name</th>
                                         <th>
                                             Address 
-                                            <div className="display: inline-block margin: 200rem">{ContactButton()}</div>
+                                            {ContactButton()}
                                             
                                         </th>
                                     </tr>

@@ -209,6 +209,38 @@ table.purpleHorizon thead th:first-child {
 table.purpleHorizon tfoot td {
   font-size: 13px;
 }
+.MuiInputLabel-root{
+  color: #e5e7eb;
+  font-size: 50px
+}
+.MuiOutlinedInput-input{
+  margin: dense;
+  font-size: 20px
+}
+.txt_center{
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+.absolute {
+  position: relative;
+  top: 550px;
+}
+
+.pin{
+  position: relative;
+  align-self: flex-end;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+.btn{
+  display: inline-block;
+  transform: translate(200px, 0px);
+}
 
 
 @tailwind base;

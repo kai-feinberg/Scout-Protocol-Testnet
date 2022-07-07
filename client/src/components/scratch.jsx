@@ -1,4 +1,4 @@
-import React from "react";
+
 import { HiMenuAlt4 } from "react-icons/hi";
 import { AiOutlineClose } from "react-icons/ai";
 
@@ -7,6 +7,11 @@ import logo from "../../images/scoutLogo.png";
 const NavBarItem = ({ title, classprops }) => (
   <li className={`mx-4 cursor-pointer ${classprops}`}>{title}</li>
 );
+
+
+const txnScroll = () =>{
+  console.log("txn");
+}
 
 const Navbar = () => {
   const [toggleMenu, setToggleMenu] = React.useState(false);
@@ -19,9 +24,23 @@ const Navbar = () => {
 
       {/*Maps over an array of items*/}
       <ul className="text-white md:flex hidden list-none flex-row justify-between items-center flex-initial">
-        {["Transactions", "Contacts", "Tutorials", "Wallets"].map((item, index) => (
+        {/* {["Transactions", "Contacts", "Tutorials", "Wallets"].map((item, index) => (
           <NavBarItem key={item + index} title={item} />
-        ))}
+        ))} */}
+        {/* <NavBarItem id={"Transactions1"} title={"Transactions"}/> */}
+        <button type="button" className="mx-4 cursor-pointer" onClick={console.log('txn clicked')}> Transactions</button>
+        <button
+            type="button"
+            onClick={txnScroll}
+            className="mx-4 cursor-pointer"
+          >
+            Add Contact
+          </button>
+        <NavBarItem key={"Contacts2"} title={"Contacts"}/>
+        <NavBarItem key={"Tutorials3"} title={"Tutorials"}/>
+
+        <NavBarItem key={"Wallets"} title={"Wallets"}/>
+
         <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
           Login
         </li>
