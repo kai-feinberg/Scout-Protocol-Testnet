@@ -84,9 +84,16 @@ const Welcome = () => {
           <button type="button" onClick={walletInfo} className="mx-4 cursor-pointer">
             Wallets
           </button>
-          <li className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
+          {/* <button type="button" onclick= {connectWallet} className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
             Login
-          </li>
+          </button> */}
+          <button
+                type="button"
+                onClick={!currentAccount && connectWallet}
+                className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
+                
+                 Login
+          </button>
         </ul>
 
         {/*creates a mobile view */}
@@ -127,68 +134,9 @@ const Welcome = () => {
     setSeen(!seen);
   };
 
-  const PopUp = () => {
-    console.log((recipient));
-
-    { Navbar() }
-    return (
-      <div className="modal">
-        <div className="modal_content">
-
-          <span className="close" onClick={changeSeen}>
-            &times;
-          </span>
-
-          <h3 className="text-white text-base font-semibold"> Adding Contact </h3>
-
-          <p className="text-white text-base font-semibold col-25 "> Name: </p>
-          <div className="p-1 sm:w-40 w-quarter flex flex-col justify-start items-center blue-glassmorphism col-75">
-            <Input placeholder="ex Dave" name="name" type="text" handleChange={handleName} />
-          </div>
-
-          <br></br>
-          <br></br>
-          <br></br>
-
-          <p className="text-white text-base font-semibold col-25"> Address: </p>
-          <div className="p-1 sm:w-40 w-quarter flex flex-col justify-start items-center blue-glassmorphism col-75">
-            <Input placeholder="ex 0xfA7C630507A3626308467FAf8aeceb756c435559" name="address" type="text" handleChange={handleAdd} />
-          </div>
-
-
-          <br />
-          <button
-            type="button"
-            onClick={addContact}
-            className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
-          >
-            Add Contact
-          </button>
-        </div>
-      </div>
-    );
-  }
-
-  const addContact = async () => {
-    if (!contactAdd || !contactName) return;
-    const transactionsContract = createEthereumContract();
-    console.log(contactAdd.address);
-    console.log(contactName.name);
-    const cnt = await transactionsContract.addContact(contactAdd.address, contactName.name);
-    await cnt.wait();
-    changeSeen();
-    window.location.reload();
-  }
-
 
   const handlePin = (e, htmlname) => {
     setPinData((prevState) => ({ ...prevState, [htmlname]: e.target.value }));
-  };
-  const handleName = (e, htmlname) => {
-    setContactName((prevState) => ({ ...prevState, [htmlname]: e.target.value }));
-  };
-  const handleAdd = (e, htmlname) => {
-    setContactAdd((prevState) => ({ ...prevState, [htmlname]: e.target.value }));
   };
 
   const sendTransaction = async () => {

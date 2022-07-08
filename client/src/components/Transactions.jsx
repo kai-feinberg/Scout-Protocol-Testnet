@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-
+import g6 from '../../images/Group 6.png';
 import { TransactionContext } from "../context/TransactionContext";
 
 import useFetch from "../hooks/useFetch";
@@ -9,9 +9,10 @@ import { shortenAddress } from "../utils/shortenAddress";
 //destructure values from transaction object
 const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword, amount, url }) => {
   const gifUrl = useFetch({ keyword });
-  const { currentAccount } = useContext(TransactionContext);
-
+  const { currentAccount, contacts } = useContext(TransactionContext);
+  
   if (addressTo.toLowerCase() === currentAccount) {
+    
   return (
     <div className="bg-[#181918] m-4 flex flex-1
       2xl:min-w-[450px]
@@ -115,6 +116,7 @@ const Transactions = () => {
           <h3 className="text-white text-3xl text-center my-2">
           Latest Transactions
           </h3>
+          <img src={g6} alt="logo" className="w-32 cursor-pointer legend" />
           
           <div className="flex flex-wrap justify-center items-center mt-10">
            {[...transactions].reverse().map((transaction, i) => (

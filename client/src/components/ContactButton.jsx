@@ -59,30 +59,32 @@ const ContactButton = () => {
                         &times;
                     </span>
 
-                    <h3 className="text-white text-base font-semibold"> Adding Contact </h3>
-
-                    <p className="text-white text-base font-semibold col-25 "> Name: </p>
-                    <div className="p-1 sm:w-40 w-quarter flex flex-col justify-start items-center blue-glassmorphism col-75">
-                        <Input placeholder="ex Dave" name="name" type="text" handleChange={handleName} />
+                    <h1 className="text-white text-2xl font-semibold"> Add Contact </h1>
+                    
+                    <p className="text-white text-base text-lgfont-semibold col-25"> Name: </p>
+                    <div className="p-1 sm:w-40 w-flex flex flex-col justify-start items-center blue-glassmorphism col-75">
+                        <Input placeholder="Name" name="name" type="text" handleChange={handleName} />
                     </div>
 
                     <br></br>
                     <br></br>
-                    <br></br>
+    
 
                     <p className="text-white text-base font-semibold col-25"> Address: </p>
-                    <div className="p-1 sm:w-40 w-quarter flex flex-col justify-start items-center blue-glassmorphism col-75">
+                    <div className="p-1 sm:w-40 w-flex flex flex-col justify-start items-center blue-glassmorphism col-75">
                         <Input placeholder="ex 0xfA7C630507A3626308467FAf8aeceb756c435559" name="address" type="text" handleChange={handleAdd} />
                     </div>
 
 
                     <br />
+                    <br></br>
+                    
                     <button
                         type="button"
                         onClick={addContact}
                         className="text-white w-full mt-2 border-[1px] p-2 border-[#3d4f7c] hover:bg-[#3d4f7c] rounded-full cursor-pointer"
                     >
-                        Send now
+                        Submit
                     </button>
                 </div>
             </div>
