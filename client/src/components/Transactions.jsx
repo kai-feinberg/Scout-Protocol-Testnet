@@ -1,4 +1,5 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
+import { useEffect } from "react";
 import g6 from '../../images/Group 6.png';
 import { TransactionContext } from "../context/TransactionContext";
 
@@ -6,13 +7,22 @@ import useFetch from "../hooks/useFetch";
 import dummyData from "../utils/dummyData";
 import { shortenAddress } from "../utils/shortenAddress";
 
+ 
 //destructure values from transaction object
 const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword, amount, url }) => {
   const gifUrl = useFetch({ keyword });
   const { currentAccount, contacts } = useContext(TransactionContext);
+  // const [cName, setcName] = useState("");
+
+  // const checkForContact = (contact) =>{
+  //   if (contact.address === addressTo || addressFrom  ){
+  //     setcName(contact.name);
+  //   }
+  // }
+  
+  // useEffect(() => {[...contacts].map((contact, i) => (checkForContact(contact)))}, []);
   
   if (addressTo.toLowerCase() === currentAccount) {
-    
   return (
     <div className="bg-[#181918] m-4 flex flex-1
       2xl:min-w-[450px]
@@ -30,7 +40,7 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
 
           <div className="display-flex justify-start w-full mb-6 p-2">
             <a href={`https://rinkeby.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
-              <p className="text-white text-base">From: {shortenAddress(addressFrom)} </p>
+              <p className="text-white text-base">From: {shortenAddress(addressFrom)}  </p>
             </a>
             <a href={`https://rinkeby.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
               <p className="text-white text-base">To: {shortenAddress(addressTo)} (You)</p>
@@ -78,7 +88,7 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
                 <p className="text-white text-base">From: {shortenAddress(addressFrom)} (You)</p>
               </a>
               <a href={`https://rinkeby.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
-                <p className="text-white text-base">To: {shortenAddress(addressTo)}</p>
+                <p className="text-white text-base">To: {shortenAddress(addressTo)} </p>
               </a>
               <p className="text-white text-base">Amount: {amount} ETH</p>
               {message && (
@@ -103,6 +113,7 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
       </div>
     );
    }
+   
 };
 
 const Transactions = () => {

@@ -79,14 +79,11 @@ const Welcome = () => {
             Contacts
           </button>
           <button type="button" onClick={txnScroll} className="mx-4 cursor-pointer">
-            Tutorials
+            <a href="https://youtu.be/1m3LEJq3gRs" target="_blank" rel="noopener noreferrer">Tutorials</a>
           </button>
           <button type="button" onClick={walletInfo} className="mx-4 cursor-pointer">
             Wallets
           </button>
-          {/* <button type="button" onclick= {connectWallet} className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
-            Login
-          </button> */}
           <button
                 type="button"
                 onClick={!currentAccount && connectWallet}
