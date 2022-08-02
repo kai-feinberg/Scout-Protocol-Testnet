@@ -7,7 +7,7 @@ import logo from "../../images/scoutLogo.png";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { ethers } from "ethers";
-import { contractABI, contractAddress } from "../utils/constants";
+import { contractABI, contractAddress, usdcAddress, usdcABI } from "../utils/constants";
 import Notiflix from 'notiflix';
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -40,7 +40,7 @@ const darkTheme = createTheme({
 
 const Welcome = () => {
   //destructures all data generated from our context file
-  const { currentAccount, connectWallet, handleChange, formData, isLoading, contacts } = useContext(TransactionContext);
+  const { currentAccount, connectWallet, handleChange, formData, isLoading, setIsLoading, contacts } = useContext(TransactionContext);
   const [currentPin, setCurrentPin] = useState("");
   const [pinData, setPinData] = useState("");
   const { ethereum } = window;
@@ -60,7 +60,7 @@ const Welcome = () => {
     document.getElementById('contacts').scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
   const walletInfo = () => {
-    Notiflix.Report.info("Coming Soon!", "Currently only polygon on metamask is supported. More wallets and networks coming soon...", "Can't wait!");
+    Notiflix.Report.info("Coming Soon!", "You can currently only transfer eth on metamask. More wallets and networks coming soon...", "Can't wait!");
   }
 
   const Navbar = () => {
@@ -88,7 +88,6 @@ const Welcome = () => {
                 type="button"
                 onClick={!currentAccount && connectWallet}
                 className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
-                
                  Login
           </button>
         </ul>
@@ -130,7 +129,6 @@ const Welcome = () => {
   const changeSeen = () => {
     setSeen(!seen);
   };
-
 
   const handlePin = (e, htmlname) => {
     setPinData((prevState) => ({ ...prevState, [htmlname]: e.target.value }));
@@ -180,6 +178,39 @@ const Welcome = () => {
     }
   };
 
+  const sendUsdc = async () => {
+
+    try {
+      if (ethereum) {
+        const { amount, keyword, message } = formData;
+        const usdcContract = createUsdcContract();
+        // console.log(usdcContract);
+        const parsedAmount = ethers.utils.parseEther(amount);
+        
+        //requests a p-2-p txn to be signed from metamask
+        await usdcContract.transfer(recipient, parsedAmount);
+        
+
+        const transactionHash = await transactionsContract.addToBlockchain(recipient, parsedAmount, message, keyword);
+
+        setIsLoading(true);
+        console.log(`Loading - ${transactionHash.hash}`);
+        await transactionHash.wait();
+        console.log(`Success - ${transactionHash.hash}`);
+        setIsLoading(false);
+
+        Notiflix.Notify.success('Transaction ' + JSON.stringify(transactionHash.hash) + ' completed successfully', { pauseOnHover: true });
+        window.location.reload();
+      } else {
+        console.log("No ethereum object");
+      }
+    } catch (error) {
+      console.log(error);
+
+      throw new Error("No ethereum object");
+    }
+  };
+
   const handleSubmit = async (e) => {
     const { addressTo, amount, keyword, message } = formData;
     //find true pin from smart contract
@@ -201,7 +232,8 @@ const Welcome = () => {
       'cancel',
 
       () => {
-        sendTransaction();
+        //sendTransaction();
+        sendUsdc();
       },
       () => {
         console.log('ahhhhhhhh the pain');
@@ -242,8 +274,19 @@ const createEthereumContract = () => {
 
   //creates contract object in JSX
   const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
-
   return transactionsContract;
+};
+
+const createUsdcContract = () => {
+  const provider = new ethers.providers.Web3Provider(ethereum);
+  const signer = provider.getSigner();
+  // console.log(usdcABI);
+  // console.log(contractABI);
+
+  //creates contract object in JSX
+  const usdcContract = new ethers.Contract(usdcAddress, usdcABI, signer);
+  console.log(usdcContract);
+  return usdcContract;
 };
 
 useEffect(() => {
