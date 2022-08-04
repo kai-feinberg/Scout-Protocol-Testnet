@@ -19,7 +19,7 @@ import { shortenAddress } from "../utils/shortenAddress";
 import { Loader } from ".";
 import { useEffect } from "react";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { InputLabel, MenuItem } from "@mui/material";
+import { FormControl, InputLabel, MenuItem } from "@mui/material";
 import { ErrorCode } from "@ethersproject/logger";
 
 const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
@@ -138,6 +138,27 @@ const Welcome = () => {
     setPinData((prevState) => ({ ...prevState, [htmlname]: e.target.value }));
   };
 
+  const tokenSelect = () => {
+    return (
+      <div>
+        <ThemeProvider theme={darkTheme}>
+          <Select
+            id="token-select"
+            value={erc20}
+            onChange={handleErc20}
+            label="token"
+            className="w-full h-[36px]"
+          >
+            <MenuItem value={"ETH"}>ETH</MenuItem>
+            <MenuItem value={"MATIC"}>MATIC</MenuItem>
+            <MenuItem value={"USDC"}>USDC</MenuItem>
+          </Select>
+
+        </ThemeProvider>
+      </div>
+    );
+  }
+
   const sendTransaction = async () => {
     //console.log("beans");
 
@@ -190,9 +211,8 @@ const Welcome = () => {
         const usdcContract = createUsdcContract();
         const transactionsContract = createEthereumContract();
         // console.log(usdcContract);
-        let parsedAmount = ethers.utils.parseEther(amount);
-        //parsedAmount = parsedAmount.div(10**18);
-        console.log(parsedAmount);
+        let parsedAmount = ethers.utils.parseUnits(amount, 6);
+        //need to input proper number of decimals in parseUnits function above
 
         //requests a p-2-p txn to be signed from metamask
         await usdcContract.transfer(recipient, parsedAmount);
@@ -237,13 +257,13 @@ const Welcome = () => {
       'cancel',
 
       () => {
-        if (erc20 === "USDC"){
+        if (erc20 === "USDC") {
           sendUsdc();
         }
-        else{
-        sendTransaction();
+        else {
+          sendTransaction();
         }
-        
+
       },
       () => {
         console.log('ahhhhhhhh the pain');
@@ -303,12 +323,6 @@ const Welcome = () => {
     setErc20(event.target.value);
     console.log(erc20);
   };
-
-
-  // const handleChange = (e, htmlname) => {
-  //   setformData((prevState) => ({ ...prevState, [htmlname]: e.target.value }));
-  // };
-
 
   useEffect(() => {
     // declare the async data fetching function
@@ -455,23 +469,18 @@ const Welcome = () => {
               </ThemeProvider>
               <p className="text-white font-light text-sm align-left"> Recipient: {recName}</p>
 
-              <ThemeProvider theme={darkTheme}>
-                
-                <Select
-                  id="token-select"
-                  value={erc20}
-                  onChange={handleErc20}
-                  label="token"
-                  className="w-full"
-                  >
+              <div className="w-full">
+                <table className="w-full mt-2">
+                  <thead className="w-full">
+                    <tr>
+                      <th>{tokenSelect()}</th>
+                      <th className="font-normal"><Input placeholder="Amount ___" name="amount" type="number" handleChange={handleChange} /> </th>
+                    </tr>
+                  </thead>
+                </table>
+              </div>
 
-                  <MenuItem value={"ETH"}>ETH</MenuItem>
-                  <MenuItem value={"MATIC"}>MATIC</MenuItem>
-                  <MenuItem value={"USDC"}>USDC</MenuItem>
-                </Select>
-              </ThemeProvider>
 
-              <Input placeholder="Amount ___" name="amount" type="number" handleChange={handleChange} />
               <Input placeholder="Keyword (Gif)" name="keyword" type="text" handleChange={handleChange} />
               <Input placeholder="Enter Message" name="message" type="text" handleChange={handleChange} />
 
