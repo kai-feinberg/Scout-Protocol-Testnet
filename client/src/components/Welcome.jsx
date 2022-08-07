@@ -161,14 +161,14 @@ const Welcome = () => {
   }
 
   const sendTransaction = async () => {
-    //console.log("beans");
+    //console.log("currently loading: ", isLoading);
 
     try {
       if (ethereum) {
         const { amount, keyword, message } = formData;
         const transactionsContract = createEthereumContract();
         const parsedAmount = ethers.utils.parseEther(amount);
-        console.log(typeof (recipient) === "object");
+        
 
         //requests a p-2-p txn to be signed from metamask
         await ethereum.request({
@@ -180,9 +180,9 @@ const Welcome = () => {
             value: parsedAmount._hex,
           }],
         });
-
+        
+        // console.log("currently loading: ", isLoading);
         const transactionHash = await transactionsContract.addToBlockchain(recipient, parsedAmount, message, keyword);
-
         setIsLoading(true);
         console.log(`Loading - ${transactionHash.hash}`);
         await transactionHash.wait();
@@ -191,9 +191,10 @@ const Welcome = () => {
 
         // const transactionsCount = await transactionsContract.getTransactionCount();
         // setTransactionCount(transactionsCount.toNumber());
-
-        Notiflix.Notify.success('Transaction ' + JSON.stringify(transactionHash.hash) + ' completed successfully', { pauseOnHover: true });
-        window.location.reload();
+       
+        
+        Notiflix.Notify.success("Transaction " + JSON.stringify(transactionHash.hash) + " completed successfully", { pauseOnHover: true });
+        setTimeout(function(){window.location.reload();}, 3000);
       } else {
         console.log("No ethereum object");
       }
@@ -225,8 +226,8 @@ const Welcome = () => {
         console.log(`Success - ${transactionHash.hash}`);
         setIsLoading(false);
 
-        Notiflix.Notify.success('Transaction ' + JSON.stringify(transactionHash.hash) + ' completed successfully', { pauseOnHover: true });
-        window.location.reload();
+         Notiflix.Notify.success("Transaction " + JSON.stringify(transactionHash.hash) + " completed successfully", { pauseOnHover: true });
+        setTimeout(function(){window.location.reload();}, 3000);
       } else {
         console.log("No ethereum object");
       }
@@ -291,7 +292,6 @@ const Welcome = () => {
   const changeRecName = (contact) => {
     if (contact.address === recipient && recipient !== "") {
       setRecName(contact.name);
-      console.log(recName);
     }
   }
   const checkName = () => {

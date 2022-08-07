@@ -17,7 +17,6 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
   const checkForContact = (contact) =>{
     if (contact.address === addressTo){
       setcName(contact.name);
-      console.log(cName);
     }
     if (contact.address === addressFrom){
       setcNameRec(contact.name);

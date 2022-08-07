@@ -33,8 +33,6 @@ const ContactButton = () => {
     const addContact = async () => {
         if (!contactAdd || !contactName) return;
         const transactionsContract = createEthereumContract();
-        console.log(contactAdd.address);
-        console.log(contactName.name);
         const cnt = await transactionsContract.addContact(contactAdd.address, contactName.name);
         await cnt.wait();
         changeSeen();

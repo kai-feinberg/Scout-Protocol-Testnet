@@ -245,6 +245,7 @@ export const TransactionProvider = ({ children }) => {
         connectWallet,
         transactions,
         currentAccount,
+        setIsLoading,
         isLoading,
         sendTransaction,
         handleChange,
