@@ -4,6 +4,7 @@ import { AiFillPlayCircle } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
 import { HiMenuAlt4 } from "react-icons/hi";
 import logo from "../../images/scoutLogo.png";
+import usdcImage from "../../images/usdc.png";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { ethers } from "ethers";
@@ -323,6 +324,15 @@ const Welcome = () => {
     setErc20(event.target.value);
     console.log(erc20);
   };
+  
+  const ercImage = () =>{
+    return(
+      <div class="token-image">
+        <img src= {usdcImage} />
+      </div>
+      
+    );
+  }
 
   useEffect(() => {
     // declare the async data fetching function
@@ -474,7 +484,7 @@ const Welcome = () => {
                   <thead className="w-full">
                     <tr>
                       <th>{tokenSelect()}</th>
-                      <th className="font-normal"><Input placeholder="Amount ___" name="amount" type="number" handleChange={handleChange} /> </th>
+                      <th className="font-normal"><Input placeholder={`Amount in ${erc20}`} name="amount" type="number" handleChange={handleChange} /> {ercImage()}</th>
                     </tr>
                   </thead>
                 </table>

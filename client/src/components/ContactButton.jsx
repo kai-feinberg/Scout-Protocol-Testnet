@@ -53,8 +53,8 @@ const ContactButton = () => {
 
     const PopUp = () => {
         return (
-            <div className="modal">
-                <div className="modal_content">
+            <div class="modal">
+                <div class="modal-content">
                     <span className="close" onClick={changeSeen}>
                         &times;
                     </span>

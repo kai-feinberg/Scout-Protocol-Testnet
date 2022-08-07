@@ -119,21 +119,21 @@ background: linear-gradient(329deg, rgba(73,9,121,1) 12%, rgba(37,29,82,1) 55%, 
   left: 0;
   width: 100%;
   height: 100%;
+  z-index: 1;
   transform: translate(-300px, 100px);
   background-color: rgba(0, 0, 0, 0.25);
 }
 
 .modal_content {
-  background-color: #1a1c24;
-  position: relative;
+  position: absolute;
   left: 50%;
   top: 50%;
-  z-index: 1;
   width: calc(100% - 40px);
   max-width: 600px;
   min-width: 400px;
   transform: translate(-50%, -50%);
   padding: 20px;
+  background-color: #1a1c24;
   border-radius: 5px;
   border: 2px solid black;
 }
@@ -247,6 +247,13 @@ html {
 
 .legend {
   transform: translate(60px, 0px);
+}
+
+.token-image{
+  position: absolute;
+  top: 118px;
+  right: 40px;
+  z-index: 1;
 }
 
 
