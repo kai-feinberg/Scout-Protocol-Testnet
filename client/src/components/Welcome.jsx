@@ -4,7 +4,9 @@ import { AiFillPlayCircle } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
 import { HiMenuAlt4 } from "react-icons/hi";
 import logo from "../../images/scoutLogo.png";
-import usdcImage from "../../images/usdc.png";
+import usdcImage from "../../images/usdc (1).png";
+import ethImage from "../../images/ethereum.png";
+import maticImage from "../../images/polygon.png";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { ethers } from "ethers";
@@ -326,12 +328,30 @@ const Welcome = () => {
   };
   
   const ercImage = () =>{
+    if (erc20==="ETH"){
     return(
-      <div class="token-image">
-        <img src= {usdcImage} />
+      <div className="inline-block mt-1"> 
+        <img  style={{width:18, height:28}} src= {ethImage}/>
       </div>
       
     );
+    }
+    else if (erc20 === "MATIC"){
+      return(
+        <div className="inline-block mt-1"> 
+          <img  style={{width:28, height:28}} src= {maticImage}/>
+        </div>
+        
+      );
+    }
+    else if (erc20 === "USDC"){
+      return(
+        <div className="inline-block mt-1"> 
+          <img  style={{width:28, height:28}} src= {usdcImage}/>
+        </div>
+        
+      );
+    }
   }
 
   useEffect(() => {
@@ -484,7 +504,8 @@ const Welcome = () => {
                   <thead className="w-full">
                     <tr>
                       <th>{tokenSelect()}</th>
-                      <th className="font-normal"><Input placeholder={`Amount in ${erc20}`} name="amount" type="number" handleChange={handleChange} /> {ercImage()}</th>
+                      <th className="font-normal"><Input placeholder={`Amount in ${erc20}`} name="amount" type="number" handleChange={handleChange} /></th>
+                      <th> {ercImage()}</th>
                     </tr>
                   </thead>
                 </table>
