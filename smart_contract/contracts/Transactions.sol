@@ -25,6 +25,7 @@ contract Transactions{
         string message;
         uint256 timestamp;
         string keyword;
+        string token;
     }
 
     struct Contact{
@@ -36,10 +37,10 @@ contract Transactions{
     TransferStruct[] transactions; 
 
 // timestamp from block.timestamp
-    function addToBlockchain(address payable reciever, uint amount, string memory message, string memory keyword) public {
+    function addToBlockchain(address payable reciever, uint amount, string memory message, string memory keyword, string memory token) public {
         users[msg.sender].transactionCount+=1;
-        users[msg.sender].transactions.push(TransferStruct(msg.sender, reciever, amount, message, block.timestamp, keyword));
-        users[reciever].transactions.push(TransferStruct(msg.sender, reciever, amount, message, block.timestamp, keyword));
+        users[msg.sender].transactions.push(TransferStruct(msg.sender, reciever, amount, message, block.timestamp, keyword, token));
+        users[reciever].transactions.push(TransferStruct(msg.sender, reciever, amount, message, block.timestamp, keyword, token));
 
         emit Transfer(msg.sender, reciever, amount, message, block.timestamp, keyword);
     }

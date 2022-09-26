@@ -54,7 +54,10 @@ export const TransactionProvider = ({ children }) => {
           timestamp: new Date(transaction.timestamp.toNumber() * 1000).toLocaleString(),
           message: transaction.message,
           keyword: transaction.keyword,
-          amount: parseInt(transaction.amount._hex) / (10 ** 18)
+          amount: parseInt(transaction.amount._hex) / (10 ** 18),
+          token: transaction.token,
+
+          //need to insert token
         }));
 
         //console.log(structuredTransactions);
@@ -245,6 +248,7 @@ export const TransactionProvider = ({ children }) => {
         connectWallet,
         transactions,
         currentAccount,
+        setIsLoading,
         isLoading,
         sendTransaction,
         handleChange,

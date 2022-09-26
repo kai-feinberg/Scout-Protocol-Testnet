@@ -8,7 +8,7 @@ import dummyData from "../utils/dummyData";
 import { shortenAddress } from "../utils/shortenAddress";
  
 //destructure values from transaction object
-const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword, amount, url }) => {
+const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword, amount, url, token }) => {
   const { currentAccount, contacts } = useContext(TransactionContext);
   const gifUrl = useFetch({ keyword });
   const [cName, setcName] = useState("unknown");
@@ -17,7 +17,6 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
   const checkForContact = (contact) =>{
     if (contact.address === addressTo){
       setcName(contact.name);
-      console.log(cName);
     }
     if (contact.address === addressFrom){
       setcNameRec(contact.name);
@@ -50,7 +49,7 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
             <a href={`https://rinkeby.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
               <p className="text-white text-base">To: {shortenAddress(addressTo)} (You)</p>
             </a>
-            <p className="text-white text-base">Amount: {amount} ETH</p>
+            <p className="text-white text-base">Amount: {amount} {token}</p>
             {message && (
               <>
                 <br />
@@ -97,7 +96,7 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
               <a href={`https://rinkeby.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
                 <p className="text-white text-base">To: {shortenAddress(addressTo)} ({cName}) </p>
               </a>
-              <p className="text-white text-base">Amount: {amount} ETH</p>
+              <p className="text-white text-base">Amount: {amount} {token}</p>
               {message && (
                 <>
                   <br />
