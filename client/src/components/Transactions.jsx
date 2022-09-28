@@ -21,11 +21,13 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
     if (contact.address === addressFrom){
       setcNameRec(contact.name);
     }
-    
   }
  
   useEffect(() => {[...contacts].map((contact, i) => (checkForContact(contact)))}, []);
   
+  if (token== "USDC"){
+    amount= amount*10**12;
+  }
   if (addressTo.toLowerCase() === currentAccount) {
   return (
     <div className="bg-[#181918] m-4 flex flex-1
