@@ -124,7 +124,7 @@ export const TransactionProvider = ({ children }) => {
   const switchNetwork = async () => {
 	if (window.ethereum) {
 		try {
-			// Try to switch to the Mumbai testnet
+
 			await window.ethereum.request({
 				method: 'wallet_switchEthereumChain',
 				params: [{ chainId: '0x4' }], // Check networks.js for hexadecimal network ids
@@ -193,6 +193,18 @@ export const TransactionProvider = ({ children }) => {
     }
   };
 
+  const disconnectWallet = async () => {
+    await window.ethereum.request({
+      method: "wallet_requestPermissions",
+      params: [
+        {
+          eth_accounts: {}
+        }
+      ]
+    });
+    window.location.reload();
+  };
+
   const sendTransaction = async () => {
     try {
       if (ethereum) {
@@ -246,6 +258,7 @@ export const TransactionProvider = ({ children }) => {
       value={{
         transactionCount,
         connectWallet,
+        disconnectWallet,
         transactions,
         currentAccount,
         setIsLoading,

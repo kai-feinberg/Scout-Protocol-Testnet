@@ -46,7 +46,7 @@ const darkTheme = createTheme({
 
 const Welcome = () => {
   //destructures all data generated from our context file
-  const { currentAccount, connectWallet, handleChange, formData, isLoading, setIsLoading, contacts } = useContext(TransactionContext);
+  const { currentAccount, connectWallet, disconnectWallet, handleChange, formData, isLoading, setIsLoading, contacts } = useContext(TransactionContext);
   const [currentPin, setCurrentPin] = useState("");
   const [pinData, setPinData] = useState("");
   const { ethereum } = window;
@@ -91,12 +91,26 @@ const Welcome = () => {
           <button type="button" onClick={walletInfo} className="mx-4 cursor-pointer">
             Wallets
           </button>
+
+          {!currentAccount &&
           <button
             type="button"
-            onClick={!currentAccount && connectWallet}
+            onClick={connectWallet}
             className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
             Login
           </button>
+          }
+          
+          {currentAccount &&
+          <button
+            type="button"
+            onClick={disconnectWallet}
+            className="bg-[#2952e3] py-2 px-7 mx-4 rounded-full cursor-pointer hover:bg-[#2546bd]">
+            Change Account
+          </button>
+          }
+
+
         </ul>
 
         {/*creates a mobile view */}
