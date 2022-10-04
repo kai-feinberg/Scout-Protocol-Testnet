@@ -442,16 +442,16 @@ const Welcome = () => {
 
               <div className="grid sm:grid-cols-3 grid-cols-2 w-full mt-10">
                 <div className={`rounded-tl-2xl ${companyCommonStyles}`}>
-                  Reliable
+                  Secure
                 </div>
-                <div className={companyCommonStyles}>Secure</div>
+                <div className={companyCommonStyles}>Multi-Coin</div>
                 <div className={`sm:rounded-tr-2xl ${companyCommonStyles}`}>
                   Decentralized
                 </div>
                 <div className={`sm:rounded-bl-2xl ${companyCommonStyles}`}>
                   Web 3.0
                 </div>
-                <div className={companyCommonStyles}>No Fees</div>
+                <div className={companyCommonStyles}>Free</div>
                 <div className={`rounded-br-2xl ${companyCommonStyles}`}>
                   Intuitive
                 </div>
