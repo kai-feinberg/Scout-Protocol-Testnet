@@ -10,7 +10,7 @@ import maticImage from "../../images/polygon.png";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { ethers } from "ethers";
-import { contractABI, contractAddress, usdcAddress, usdcABI } from "../utils/constants";
+import { goerliContractABI, goerliContractAddress, usdcAddress, usdcABI } from "../utils/constants";
 import Notiflix from 'notiflix';
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -26,6 +26,9 @@ import { FormControl, InputLabel, MenuItem } from "@mui/material";
 import { ErrorCode } from "@ethersproject/logger";
 
 const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex justify-center items-center border-[0.5px] border-gray-400 text-sm font-light text-white";
+
+let contractAddress= goerliContractAddress;
+let contractABI= goerliContractABI; 
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input

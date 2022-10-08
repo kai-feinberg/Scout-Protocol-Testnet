@@ -40,15 +40,15 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
       incoming-transaction
       "
     >
-    <a href={`https://rinkeby.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
+    <a href={`https://goerli.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
       <div className="flex flex-col items-center w-full mt-3">
 
 
           <div className="display-flex justify-start w-full mb-6 p-2">
-            <a href={`https://rinkeby.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
+            <a href={`https://goerli.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
               <p className="text-white text-base">From: {shortenAddress(addressFrom)} ({cNameRec}) </p>
             </a>
-            <a href={`https://rinkeby.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
+            <a href={`https://goerli.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
               <p className="text-white text-base">To: {shortenAddress(addressTo)} (You)</p>
             </a>
             <p className="text-white text-base">Amount: {amount} {token}</p>
@@ -87,15 +87,15 @@ const TransactionsCard = ({ addressTo, addressFrom, timestamp, message, keyword,
         outgoing-transaction
         "
       >
-      <a href={`https://rinkeby.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
+      <a href={`https://goerli.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
         <div className="flex flex-col items-center w-full mt-3">
   
   
             <div className="display-flex justify-start w-full mb-6 p-2">
-              <a href={`https://rinkeby.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
+              <a href={`https://goerli.etherscan.io/address/${addressFrom}`} target="_blank" rel="noreferrer">
                 <p className="text-white text-base">From: {shortenAddress(addressFrom)} (You)</p>
               </a>
-              <a href={`https://rinkeby.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
+              <a href={`https://goerli.etherscan.io/address/${addressTo}`} target="_blank" rel="noreferrer">
                 <p className="text-white text-base">To: {shortenAddress(addressTo)} ({cName}) </p>
               </a>
               <p className="text-white text-base">Amount: {amount} {token}</p>

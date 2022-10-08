@@ -5,7 +5,7 @@ import { ethers } from "ethers";
 import Notiflix from 'notiflix';
 
 
-import { contractABI, contractAddress } from "../utils/constants";
+import { goerliContractABI, goerliContractAddress } from "../utils/constants";
 
 
 export const TransactionContext = React.createContext();
@@ -17,7 +17,7 @@ const createEthereumContract = () => {
   const signer = provider.getSigner();
   
   //creates contract object in JSX
-  const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+  const transactionsContract = new ethers.Contract(goerliContractAddress, goerliContractABI, signer);
 
   return transactionsContract;
 };
@@ -106,8 +106,8 @@ export const TransactionProvider = ({ children }) => {
 
       if (accounts.length) {
         setCurrentAccount(accounts[0]);
-        if (chainId !== '0x4'){
-          Notiflix.Report.warning("Wrong Network!", "Please switch to the rinkeby testnet", "Done");
+        if (chainId !== '0x5'){
+          Notiflix.Report.warning("Wrong Network!", "Please switch to the goerli testnet", "Done");
           switchNetwork();
         }
         getAllTransactions();
@@ -127,7 +127,7 @@ export const TransactionProvider = ({ children }) => {
 
 			await window.ethereum.request({
 				method: 'wallet_switchEthereumChain',
-				params: [{ chainId: '0x4' }], // Check networks.js for hexadecimal network ids
+				params: [{ chainId: '0x5' }], // Check networks.js for hexadecimal network ids
 			});
       window.location.reload();
 		} catch (error) {
@@ -139,15 +139,15 @@ export const TransactionProvider = ({ children }) => {
 						method: 'wallet_addEthereumChain',
 						params: [
 							{	
-								chainId: '0x4',
-								chainName: 'Rinkeby Testnet',
-								rpcUrls: ['https://rinkeby.infura.io/v3/'],
+								chainId: '0x5',
+								chainName: 'Goerli Testnet',
+								rpcUrls: ['https://www.ethercluster.com/goerli'],
 								nativeCurrency: {
 										name: "Ethereum",
 										symbol: "ETH",
 										decimals: 18
 								},
-								blockExplorerUrls: ["https://rinkey.etherscan.io"]
+								blockExplorerUrls: ["https://goerli.etherscan.io/"]
 							},
 						],
 					});

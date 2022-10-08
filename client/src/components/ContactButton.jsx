@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { ethers } from "ethers";
-import { contractABI, contractAddress } from "../utils/constants";
+import { goerliContractABI, goerliContractAddress } from "../utils/constants";
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
     <input
@@ -44,7 +44,7 @@ const ContactButton = () => {
         const signer = provider.getSigner();
 
         //creates contract object in JSX
-        const transactionsContract = new ethers.Contract(contractAddress, contractABI, signer);
+        const transactionsContract = new ethers.Contract(goerliContractAddress, goerliContractABI, signer);
 
         return transactionsContract;
     };
