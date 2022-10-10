@@ -10,7 +10,7 @@ import maticImage from "../../images/polygon.png";
 import { SiEthereum } from "react-icons/si";
 import { BsInfoCircle } from "react-icons/bs";
 import { ethers } from "ethers";
-import { goerliContractABI, goerliContractAddress, usdcAddress, usdcABI } from "../utils/constants";
+import { goerliContractABI, goerliContractAddress, goerliusdcAddress, goerliusdcABI } from "../utils/constants";
 import Notiflix from 'notiflix';
 import TextField from "@mui/material/TextField";
 import Autocomplete from "@mui/material/Autocomplete";
@@ -29,6 +29,8 @@ const companyCommonStyles = "min-h-[70px] sm:px-0 px-2 sm:min-w-[120px] flex jus
 
 let contractAddress= goerliContractAddress;
 let contractABI= goerliContractABI; 
+let usdcAddress = goerliusdcAddress;
+let usdcABI = goerliusdcABI;
 
 const Input = ({ placeholder, name, type, value, handleChange }) => (
   <input
@@ -232,7 +234,9 @@ const Welcome = () => {
         const usdcContract = createUsdcContract();
         const transactionsContract = createEthereumContract();
         // console.log(usdcContract);
-        let parsedAmount = ethers.utils.parseUnits(amount, 6);
+        let parsedAmount = ethers.utils.parseEther(amount);
+        parsedAmount = parsedAmount/10**12;
+        console.log(parsedAmount);
         //need to input proper number of decimals in parseUnits function above
 
         //requests a p-2-p txn to be signed from metamask
